@@ -60,7 +60,7 @@ pipeline{
     stage ("Remove docker image"){
         steps
         {
-          sh "${Register}:latest"
+          sh "${Register}"
         }
       }
     }
