@@ -1,35 +1,30 @@
 pipeline{
 
-agent any
+    agent any
 
     environment{
-        Register ="damier85/damier-raymond"
-        RegisterCrudential ="Mydocker20"
+        //REPOSITORY PROJECTNAME - SEE CONVENTION FOR CALIBUR:
+        //caliber-assessment
+        //caliber-quality
+        //caliber-config
+        //caliber-category
+        //caliber-batch
+        RegisterFilename = "CHANGEME"
+        //THE NAME OF THE DOCKER ECR REPOSITORY  ====  DO NOT CHANGE ====
+        Register ="367484709954.dkr.ecr.us-east-2.amazonaws.com/${RegisterFilename}"
+        //THE JENKINS CREDENTIAL ID TO MATCH ECR REPOSITORY CREDENTIALS   ====  DO NOT CHANGE ====
+        RegisterCredential ="RevatureECR"
         dockerImage =""
-        forTheAWSecr="367484709954.dkr.ecr.us-east-2.amazonaws.com/caliber-angular"
-        Region ="ecr:us-east-2"
-        ID="RevatureECR"
-
-
     }
- 
   stages{
 
-    stage('Install/update Devkit and Get Node Version'){
-            steps
-                {
-                  sh 'npm install @angular-devkit/build-angular'
-                  sh 'node --version'
-                }
-          }
-      stage('lint'){
-            
-            steps{
-                  
-                  sh 'ng build'
-                  sh 'pwd'                
-                }
-          } 
+    stage('Install/update Devkit/GetNodeVersion'){
+        steps
+            {
+                sh 'npm install @angular-devkit/build-angular'
+                sh 'node --version'
+            }
+        }
       stage(' Build'){
             
             steps{
@@ -38,16 +33,14 @@ agent any
                   sh 'pwd'                
                 }
           }
-    
    stage('Docker Build')
     {
-
         steps{
-              script
-              {
-                dockerImage = docker.build("${forTheAWSecr}")
-                echo '${dockerImage}'
-              }
+            script
+            {
+            dockerImage = docker.build("${forTheAWSecr}")
+            echo '${dockerImage}'
+            }
         }
     }
   
@@ -60,16 +53,11 @@ agent any
 
                 docker.withRegistry('https://367484709954.dkr.ecr.us-east-2.amazonaws.com', "${REGION}:${ID}")
                 {
-
                     dockerImage.push("latest")
-
                 }
-            }
-            
+            }  
         }
-
     }
-
     stage ("Remove docker image"){
         steps
         {
