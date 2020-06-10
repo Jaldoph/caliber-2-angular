@@ -23,36 +23,14 @@ agent any
                 }
           }
   
-     stage(' NPM Version'){
-            steps
-                {
-                  sh 'pwd'
-                  sh 'npm version'
-                  sh 'npm --version'
-                }
-          }
-  
-  
       stage(' Build'){
             
             steps{
                   
                   sh 'ng build'
-                  sh 'pwd'
-                  sh 'cd dist'
-                
+                  sh 'pwd'                
                 }
           }
-  
-      stage(' Ng Version'){
-            steps{
-                  
-                  sh 'which ng'
-                  sh 'ng --version'
-                 
-                }
-          }
-  
         stage('Building the image'){
          
           
