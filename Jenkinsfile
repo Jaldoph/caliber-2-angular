@@ -60,7 +60,7 @@ pipeline{
     stage ("Remove docker images"){
         steps
         {
-          sh "docker prune"
+          sh "docker image prune"
         }
       }
     }
