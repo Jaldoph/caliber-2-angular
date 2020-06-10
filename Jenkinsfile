@@ -14,8 +14,8 @@ pipeline{
         Register ="367484709954.dkr.ecr.us-east-2.amazonaws.com/${RegisterFilename}"
         //THE JENKINS CREDENTIAL ID TO MATCH ECR REPOSITORY CREDENTIALS   ====  DO NOT CHANGE ====
         RegisterCredential ="RevatureECR"
-        dockerImage =""
-      ${Region}= 'us-east-2'
+        dockerImage = ""
+        Region = 'us-east-2'
     }
   stages{
 
@@ -39,7 +39,7 @@ pipeline{
         steps{
             script
             {
-            dockerImage = docker.build("367484709954.dkr.ecr.us-east-2.amazonaws.com/caliber-angular")
+              dockerImage = docker.build("${Register}")
             echo '${dockerImage}'
             }
         }
@@ -62,7 +62,7 @@ pipeline{
     stage ("Remove docker image"){
         steps
         {
-          sh "docker rmi 367484709954.dkr.ecr.us-east-2.amazonaws.com/caliber-angular:latest"
+          sh "${Register}:latest"
         }
       }
     }
