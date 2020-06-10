@@ -8,7 +8,7 @@ agent any
         dockerImage =""
         forTheAWSecr="367484709954.dkr.ecr.us-east-2.amazonaws.com/caliber-angular"
         Region ="ecr:us-east-2"
-        ID="RevatureECRr"
+        ID="RevatureECR"
 
 
     }
