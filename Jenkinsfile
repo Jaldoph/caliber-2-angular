@@ -57,10 +57,10 @@ pipeline{
             }  
         }
     }
-    stage ("Remove docker image"){
+    stage ("Remove docker images"){
         steps
         {
-          sh "${Register}"
+          sh "docker prune"
         }
       }
     }
