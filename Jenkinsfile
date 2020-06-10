@@ -9,12 +9,13 @@ pipeline{
         //caliber-config
         //caliber-category
         //caliber-batch
-        RegisterFilename = "CHANGEME"
+        RegisterFilename = "caliber-angular"
         //THE NAME OF THE DOCKER ECR REPOSITORY  ====  DO NOT CHANGE ====
         Register ="367484709954.dkr.ecr.us-east-2.amazonaws.com/${RegisterFilename}"
         //THE JENKINS CREDENTIAL ID TO MATCH ECR REPOSITORY CREDENTIALS   ====  DO NOT CHANGE ====
         RegisterCredential ="RevatureECR"
         dockerImage =""
+      ${Region}= 'us-east-2'
     }
   stages{
 
@@ -38,7 +39,7 @@ pipeline{
         steps{
             script
             {
-            dockerImage = docker.build("${forTheAWSecr}")
+            dockerImage = docker.build("367484709954.dkr.ecr.us-east-2.amazonaws.com/caliber-angular")
             echo '${dockerImage}'
             }
         }
@@ -51,7 +52,7 @@ pipeline{
         {
             script{
 
-                docker.withRegistry('https://367484709954.dkr.ecr.us-east-2.amazonaws.com', "${REGION}:${ID}")
+              docker.withRegistry("${Register}", "${REGION}:${ID}")
                 {
                     dockerImage.push("latest")
                 }
