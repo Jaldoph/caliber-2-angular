@@ -41,7 +41,6 @@ agent any
                 sh'docker image prune'
                 echo 'yes'
                 dockerImage = docker.build("${Register}:my-image-Angular")
-                echo "TESTING IF IMAGE IS SUCCEED"
             }
         }
           
@@ -51,12 +50,11 @@ agent any
 
    stage('AWS Building Bloc'){
 
-        steps
-        {
-            script
-            {
+        steps{
+              script
+              {
                 dockerImage = docker.build("${forTheAWSecr}")
-            }
+              }
         }
 }
   
@@ -64,15 +62,15 @@ agent any
 
         steps
         {
-                script{
-                  
-                    docker.withRegistry('https://367484709954.dkr.ecr.us-east-2.amazonaws.com', "${REGION}:${ID}")
-                    {
-                        
-                        dockerImage.push("latest")
-                   
-                    }
+            script{
+
+                docker.withRegistry('https://367484709954.dkr.ecr.us-east-2.amazonaws.com', "${REGION}:${ID}")
+                {
+
+                    dockerImage.push("latest")
+
                 }
+            }
             
         }
 
@@ -81,7 +79,7 @@ agent any
     stage ("Remove unUsed docker image"){
         steps
         {
-            sh "docker rmi ${Register}:my-image"
+          sh "docker rmi ${dockerImage}"
         }
     }
 
