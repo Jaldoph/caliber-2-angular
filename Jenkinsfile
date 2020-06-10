@@ -29,9 +29,7 @@ pipeline{
       stage(' Build'){
             
             steps{
-                  
-                  sh 'ng build'
-                  sh 'pwd'                
+                  sh 'ng build'                
                 }
           }
    stage('Docker Build')
@@ -40,7 +38,7 @@ pipeline{
             script
             {
               dockerImage = docker.build("${Register}")
-            echo '${dockerImage}'
+              echo "${dockerImage}"
             }
         }
     }
@@ -52,7 +50,7 @@ pipeline{
         {
             script{
 
-              docker.withRegistry("${Register}", "${REGION}:${ID}")
+              docker.withRegistry("${Register}", "${REGION}:${RegisterCredential}")
                 {
                     dockerImage.push("latest")
                 }
