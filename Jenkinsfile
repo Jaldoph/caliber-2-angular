@@ -29,15 +29,7 @@ agent any
                   sh 'ng build'
                   sh 'pwd'                
                 }
-          }
-      stage('Test'){
-            
-            steps{
-                  
-                  sh 'ng test'
-                  sh 'pwd'                
-                }
-          }    
+          } 
       stage(' Build'){
             
             steps{
@@ -46,8 +38,9 @@ agent any
                   sh 'pwd'                
                 }
           }
- 
-   stage('AWS Building Bloc'){
+    
+   stage('Docker Build')
+    {
 
         steps{
               script
@@ -56,9 +49,10 @@ agent any
                 echo '${dockerImage}'
               }
         }
-}
+    }
   
-   stage ('Deploy image to AWS Ecr'){
+   stage ('Push to ECR')
+    {
 
         steps
         {
@@ -74,19 +68,13 @@ agent any
             
         }
 
-}
+    }
 
-    stage ("Remove unUsed docker image"){
+    stage ("Remove docker image"){
         steps
         {
           sh "docker rmi 367484709954.dkr.ecr.us-east-2.amazonaws.com/caliber-angular:latest"
         }
+      }
     }
-
- 
-
-
-
-}
-
 }
