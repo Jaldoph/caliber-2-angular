@@ -15,7 +15,7 @@ pipeline{
         //THE JENKINS CREDENTIAL ID TO MATCH ECR REPOSITORY CREDENTIALS   ====  DO NOT CHANGE ====
         RegisterCredential ="RevatureECR"
         dockerImage = ""
-        Region = 'us-east-2'
+        Region = 'ecr:us-east-2'
     }
   stages{
 
