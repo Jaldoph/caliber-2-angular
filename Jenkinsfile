@@ -31,29 +31,14 @@ agent any
                   sh 'pwd'                
                 }
           }
-        stage('Building the image'){
-         
-          
-           steps
-        {
-            script
-            {
-                sh'docker image prune'
-                echo 'yes'
-                dockerImage = docker.build("${Register}:my-image-Angular")
-            }
-        }
-          
-        }
-    
-
-
+ 
    stage('AWS Building Bloc'){
 
         steps{
               script
               {
                 dockerImage = docker.build("${forTheAWSecr}")
+                echo '${dockerImage}'
               }
         }
 }
