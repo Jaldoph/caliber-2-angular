@@ -61,6 +61,7 @@ pipeline{
         steps
         {
           sh "docker image prune"
+          echo 'yes'
         }
       }
     }
