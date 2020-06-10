@@ -64,7 +64,7 @@ agent any
     stage ("Remove unUsed docker image"){
         steps
         {
-          sh "docker rmi ${dockerImage}"
+          sh "docker rmi 367484709954.dkr.ecr.us-east-2.amazonaws.com/caliber-angular:latest"
         }
     }
 
