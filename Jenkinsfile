@@ -8,7 +8,7 @@ agent any
         dockerImage =""
         forTheAWSecr="367484709954.dkr.ecr.us-east-2.amazonaws.com/caliber-angular"
         Region ="ecr:us-east-2"
-        ID="damierTestEcr"
+        ID="RevatureECRr"
 
 
     }
@@ -22,7 +22,22 @@ agent any
                   sh 'node --version'
                 }
           }
-  
+      stage('lint'){
+            
+            steps{
+                  
+                  sh 'ng build'
+                  sh 'pwd'                
+                }
+          }
+      stage('Test'){
+            
+            steps{
+                  
+                  sh 'ng test'
+                  sh 'pwd'                
+                }
+          }    
       stage(' Build'){
             
             steps{
