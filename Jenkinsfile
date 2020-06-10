@@ -18,7 +18,7 @@ agent any
     stage('Install/update Devkit and Get Node Version'){
             steps
                 {
-                  sh 'sudo npm install @angular-devkit/build-angular'
+                  sh 'npm install @angular-devkit/build-angular'
                   sh 'node --version'
                 }
           }
