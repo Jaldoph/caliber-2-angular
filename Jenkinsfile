@@ -65,4 +65,23 @@ pipeline{
         }
       }
     }
+  stage ("Retrieve helm charts"){
+    steps
+      {
+        sh "aws s3 cp s3://caliber-2-dev.revaturelabs.com/devops-p3-helmcharts/ ./ --recursive"
+      }
+  }
+  stage ("Deploy appropriate Chart"){
+    steps
+    {
+      sh ("helm install ${RegisterFilename}-charts")
+    }
+  }
+  stage ("View Kube Status"){
+    steps
+    {
+      sh("kubectl get all")
+    }
+  }
 }
+    
