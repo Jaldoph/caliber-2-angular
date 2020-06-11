@@ -9,7 +9,8 @@ pipeline{
         //caliber-config
         //caliber-category
         //caliber-batch
-        RegisterFilename = "CHANGEME"
+        //caliber-angular
+        RegisterFilename = "caliber-angular"
         //THE NAME OF THE DOCKER ECR REPOSITORY  ====  DO NOT CHANGE ====
         Register ="367484709954.dkr.ecr.us-east-2.amazonaws.com/${RegisterFilename}"
         //THE JENKINS CREDENTIAL ID TO MATCH ECR REPOSITORY CREDENTIALS   ====  DO NOT CHANGE ====
