@@ -9,7 +9,7 @@ pipeline{
         //caliber-config
         //caliber-category
         //caliber-batch
-        RegisterFilename = "caliber-angular"
+        RegisterFilename = "CHANGEME"
         //THE NAME OF THE DOCKER ECR REPOSITORY  ====  DO NOT CHANGE ====
         Register ="367484709954.dkr.ecr.us-east-2.amazonaws.com/${RegisterFilename}"
         //THE JENKINS CREDENTIAL ID TO MATCH ECR REPOSITORY CREDENTIALS   ====  DO NOT CHANGE ====
@@ -32,56 +32,47 @@ pipeline{
                   sh 'ng build'                
                 }
           }
-     stage('Docker Build')
-      {
-          steps{
-              script
-              {
-                dockerImage = docker.build("${Register}")
-                echo "${dockerImage}"
-              }
-          }
-      }
+   stage('Docker Build')
+    {
+        steps{
+            script
+            {
+              dockerImage = docker.build("${Register}")
+              echo "${dockerImage}"
+            }
+        }
+    }
+  
+   stage ('Push to ECR')
+    {
 
-     stage ('Push to ECR')
-      {
+        steps
+        {
+            script{
 
-          steps
-          {
-              script{
-
-                docker.withRegistry('https://367484709954.dkr.ecr.us-east-2.amazonaws.com', "${REGION}:${RegisterCredential}")
-                  {
-                      dockerImage.push("latest")
-                  }
-              }  
-          }
-      }
-      stage ("Remove docker images"){
+              docker.withRegistry('https://367484709954.dkr.ecr.us-east-2.amazonaws.com', "${REGION}:${RegisterCredential}")
+                {
+                    dockerImage.push("latest")
+                }
+            }  
+        }
+    }
+    stage ("Remove docker images"){
         steps
         {
           sh "docker image prune"
-          echo 'yes'
         }
-    }
-    stage ("Retrieve helm charts"){
-      steps
-        {
-          sh "aws s3 cp s3://caliber-2-dev.revaturelabs.com/devops-p3-helmcharts/ ./ --recursive"
-        }
-    }
-    stage ("Deploy appropriate Chart"){
-      steps
-      {
-        sh ("helm install ${RegisterFilename}-charts")
       }
     }
-    stage ("View Kube Status"){
-      steps
-      {
-        sh("kubectl get all")
+    post {
+      failure {
+          emailext (
+              subject: "FAILED: '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+              body: "JOB '${env.JOB_NAME} [${env.BUILD_NUMBER}]' has failed on '${env.BUILD_TIMESTAMP}'.\nGIT URL: '${env.GIT_URL}'\nGIT BRANCH: '${env.GIT_BRANCH}'\nGIT COMMIT SHA: '${env.GIT_COMMIT}'\nCheck the console output at '${env.BUILD_URL}'.",
+              to: "centerofexcellence@revature.com",
+              attachLog: true
+              )
       }
     }
-  }
 }
-    
+
