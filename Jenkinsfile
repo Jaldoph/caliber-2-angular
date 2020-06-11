@@ -32,55 +32,55 @@ pipeline{
                   sh 'ng build'                
                 }
           }
-   stage('Docker Build')
-    {
-        steps{
-            script
-            {
-              dockerImage = docker.build("${Register}")
-              echo "${dockerImage}"
-            }
-        }
-    }
-  
-   stage ('Push to ECR')
-    {
+     stage('Docker Build')
+      {
+          steps{
+              script
+              {
+                dockerImage = docker.build("${Register}")
+                echo "${dockerImage}"
+              }
+          }
+      }
 
-        steps
-        {
-            script{
+     stage ('Push to ECR')
+      {
 
-              docker.withRegistry('https://367484709954.dkr.ecr.us-east-2.amazonaws.com', "${REGION}:${RegisterCredential}")
-                {
-                    dockerImage.push("latest")
-                }
-            }  
-        }
-    }
-    stage ("Remove docker images"){
+          steps
+          {
+              script{
+
+                docker.withRegistry('https://367484709954.dkr.ecr.us-east-2.amazonaws.com', "${REGION}:${RegisterCredential}")
+                  {
+                      dockerImage.push("latest")
+                  }
+              }  
+          }
+      }
+      stage ("Remove docker images"){
         steps
         {
           sh "docker image prune"
           echo 'yes'
         }
-      }
     }
-  stage ("Retrieve helm charts"){
-    steps
+    stage ("Retrieve helm charts"){
+      steps
+        {
+          sh "aws s3 cp s3://caliber-2-dev.revaturelabs.com/devops-p3-helmcharts/ ./ --recursive"
+        }
+    }
+    stage ("Deploy appropriate Chart"){
+      steps
       {
-        sh "aws s3 cp s3://caliber-2-dev.revaturelabs.com/devops-p3-helmcharts/ ./ --recursive"
+        sh ("helm install ${RegisterFilename}-charts")
       }
-  }
-  stage ("Deploy appropriate Chart"){
-    steps
-    {
-      sh ("helm install ${RegisterFilename}-charts")
     }
-  }
-  stage ("View Kube Status"){
-    steps
-    {
-      sh("kubectl get all")
+    stage ("View Kube Status"){
+      steps
+      {
+        sh("kubectl get all")
+      }
     }
   }
 }
